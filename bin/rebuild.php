@@ -7,6 +7,7 @@
  * Author: Jason<dcq@kuryun.cn>
  */
 
+use Rebuild\Command\StartCommand;
 use Rebuild\Config\ConfigFactory;
 use Symfony\Component\Console\Application;
 
@@ -19,6 +20,10 @@ $config = new ConfigFactory();
 $config = $config();
 $commands = $config->get('commands');
 foreach ($commands as $command) {
-    $application->add(new $command);
+    if ($command === StartCommand::class) {
+        $application->add(new StartCommand($config));
+    } else {
+        $application->add(new $command);
+    }
 }
 $application->run();
